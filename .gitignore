@@ -1,0 +1,5 @@
+# Ignore macOS generated files
+.DS_Store
+
+# Ignore robots.txt
+robots.txt
