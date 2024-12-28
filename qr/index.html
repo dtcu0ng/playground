@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!--AI-generated code, for testing purposes only-->
+    <!--Version 2.4-releasetag-->
+    <meta charset="utf-8" />
+    <title>QR Code Generator - ctd's Playground</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Generate QR codes for free and easily with our QR Code Generator. Customize your QR codes with various options and download them instantly. Get your free QR Codes now!">
+    <meta name="keywords" content="QR Code, QR Code Generator, QR Code Maker, QR Code Customization, Free QR Code Generator, Free QR Code Maker, Free QR Code Customization">
+    <meta name="author" content="ctd's Playground">
+    <link rel="canonical" href="https://qr.ctd.io.vn/">
+    <link rel="stylesheet" href="stylesheet/style.css">
+    <script src="https://cdn.jsdelivr.net/npm/easyqrcodejs/dist/easy.qrcode.min.js"></script>
+    <script src="script/lang.js"></script>
+    <script src="script/script.js"></script>
+    <link rel="manifest" href="manifest.json" />
+    <link rel="shorcut icon" href="icons/icon-192x192.png" type="image/x-icon" />
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-Y1K6CNQ4SP"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+
+        gtag('config', 'G-Y1K6CNQ4SP');
+    </script>
+
+    <!-- Open Graph Meta Tags -->
+    <meta property="og:title" content="QR Code Generator - ctd's Playground">
+    <meta property="og:description" content="Generate QR codes for free and easily with our QR Code Generator. Customize your QR codes with various options and download them instantly. Get your free QR Codes now!">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://qr.ctd.io.vn/">
+    <meta property="og:image" content="https://qr.ctd.io.vn/assets/preview.png">
+
+    <!-- Twitter Card Meta Tags -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="QR Code Generator - ctd's Playground">
+    <meta name="twitter:description" content="Generate QR codes for free and easily with our QR Code Generator. Customize your QR codes with various options and download them instantly. Get your free QR Codes now!">
+    <meta name="twitter:image" content="https://qr.ctd.io.vn/assets/preview.png">
+
+    <!-- Structured Data -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "WebSite",
+        "name": "QR Code Generator - ctd's Playground",
+        "url": "https://qr.ctd.io.vn/",
+        "description": "Generate QR codes for free and easily with our QR Code Generator. Customize your QR codes with various options and download them instantly. Get your free QR Codes now!",
+        "author": {
+            "@type": "Person",
+            "name": "ctd's Playground"
+        }
+    }
+    </script>
+</head>
+<body>
+    <div id="top-bar">
+        <div id="toggleThemeBtn" onclick="toggleTheme()">☀️</div>
+        <div id="languageSelectorBtn" onclick="toggleLanguageDropdown()">🌐</div>
+    </div>
+    <div id="overlay" onclick="closeDialogs()"></div>
+    <div id="main-content" class="main-container">
+        <div class="container">
+            <h1 id="title">QR Code Generator</h1>
+            <div>
+                <label id="contentLabel">Content:</label>
+                <input id="qrText" type="text" placeholder="Enter your content here to make QR Code" />
+                <div class="error-message" id="errorMessage" style="display: none;">Please enter content to generate or clear QR code.</div>
+                <div class="button-container">
+                    <button id="generateBtn" onclick="generateQRCode()" style="color: #e0e0e0;">Generate QR</button>
+                    <button id="customizationBtn" onclick="showCustomization()" style="color: #e0e0e0;">Advanced Customization</button>
+                </div>
+                <div class="button-container">
+                    <button id="historyBtn" onclick="showHistory()" style="color: #e0e0e0;">Show History</button>
+                </div>
+            </div>
+        </div>
+        <div id="qrcode-container" class="container">
+            <div id="qrcode"></div>
+            <br>
+            <div class="button-container">
+            <button id="downloadBtn" onclick="downloadQRCode()" style="color: #e0e0e0;">Download QR Code</button>
+            <button id="clearBtn" onclick="clearQRCode()" style="color: #e0e0e0;"">Clear this QR</button>
+            </div>
+        </div>
+        <div id="copyright-holder" class="container" style="text-align: center;">
+            <p>QR Code Generator - 2024 ctd's Playground. Powered by <a href="https://ctdinh.io.vn">dtcu0ng</a> (aka ctd).</p>
+        </div>
+    </div>
+    <div id="languageSelectorBtn" onclick="toggleLanguageDropdown()">A</div>
+    <div id="languageDropdown" class="dropdown-content" style="display: block;">
+        <a href="#" onclick="setLanguage('en')">English</a>
+        <a href="#" onclick="setLanguage('es')">Spanish</a>
+        <a href="#" onclick="setLanguage('fr')">French</a>
+        <a href="#" onclick="setLanguage('vi')">Vietnamese</a>
+        <a href="#" onclick="setLanguage('zh')">Chinese (Simplified)</a>
+        <a href="#" onclick="setLanguage('ja')">Japanese</a>
+        <!-- Add more languages as needed -->
+    </div>
+    <div id="historyDialog">
+        <div class="dialog-title-bar">
+            <h2 id="titleQRHistory" style="color: #e0e0e0;">QR Code History</h2>
+            <button onclick="closeHistory()">×</button>
+        </div>
+        <div class="history-content">
+            <p id="historyDialogNote1L1">Note: QR Code history will be deleted in 30 days.</p>
+            <button id="clearStorageBtn" onclick="wipeHistory()"><p id="historyDialogNote1L2">wipe it now</p></button>
+            <br>
+            <table id="historyTable">
+                <thead>
+                    <tr>
+                        <th id="historyTableQRCode">QR Code</th>
+                        <th id="historyTableQRContent">Content</th>
+                        <th id="historyTableQRTimestamp">Timestamp</th>
+                        <th id="historyTableQRAction">Action</th>
+                    </tr>
+                </thead> 
+                <tbody id="historyContent"></tbody>
+            </table>
+        </div>
+    </div>
+    <div id="customizationDialog">
+        <div class="dialog-title-bar">
+            <h2 id="titleCustomizationDialog" style="color: #e0e0e0;">Advanced Customization</h2>
+            <button onclick="closeCustomization()">×</button>
+        </div>
+        <div class="customization-content">
+            <label><a id="customizationDialogSetting1">QR Lines/Dots Color:</a>
+                <input id="qrDark" type="color" value="#000000" />
+            </label>
+            <label><a id="customizationDialogSetting2">QR Background Color:</a>
+                <input id="qrLight" type="color" value="#ffffff" />
+            </label>
+            <label><a id="customizationDialogSetting3">Dot Scale (0.1 - 1):</a>
+                <input id="qrDotScale" type="number" step="0.1" min="0.1" max="1" value="1" />
+            <label><a id="customizationDialogSetting4">Logo:</a>
+                <input id="qrLogo" type="file" accept="image/*" />
+                <button type="button" onclick="clearLogo()"><a id=customizationDialogSetting4B1>Clear Logo</a></button>
+            </label>
+            <label><a id="customizationDialogSetting5">Background Image:</a>
+                <input id="qrBgImage" type="file" accept="image/*" />
+                <button type="button" onclick="clearBackgroundImage()"><a id=customizationDialogSetting5B1>Clear Background</a></button>
+            </label>
+            <label><a id="customizationDialogSetting6">Auto Color (check for auto):</a>
+                <input id="qrAutoColor" type="checkbox" />
+            </label>
+            <label><a id="customizationDialogSetting7">Size:</a>
+                <input id="qrSize" type="number" value="200" />
+            </label>
+            <label><a id="customizationDialogSetting8">Margin:</a>
+                <input id="qrMargin" type="number" value="10" />
+            </label>
+            <label><a id="customizationDialogSetting9">Error Correction Level:</a>
+                <select id="qrErrorCorrectionLevel">
+                    <option id="qrErrorCorrectionLevel1" value="L">Low</option>
+                    <option id="qrErrorCorrectionLevel2" value="M" selected>Medium</option>
+                    <option id="qrErrorCorrectionLevel3" value="Q">Quartile</option>
+                    <option id="qrErrorCorrectionLevel4" value="H">High</option>
+                </select>
+            </label>
+            <button type="button" onclick="clearPWACache()">Clear PWA Cache</button>
+        </div>
+    </div>
+    <script>
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('service-worker.js')
+            .then(function(registration) {
+                console.log('Service Worker registered with scope:', registration.scope);
+            }).catch(function(error) {
+                console.log('Service Worker registration failed:', error);
+            });
+        }
+    </script>
+</body>
+</html>

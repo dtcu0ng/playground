@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Spotify Stats Analyzer</title>
+  <script src="https://cdn.jsdelivr.net/npm/litepicker/dist/litepicker.js"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/litepicker/dist/css/litepicker.css">
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #f4f4f9;
+      color: #333;
+    }
+    h1, h2, h3 {
+      font-family: 'Segoe UI', sans-serif;
+      color: #444;
+    }
+    .container {
+      max-width: 800px;
+      margin: 30px auto;
+      padding: 20px;
+      background-color: #fff;
+      border-radius: 10px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    }
+    .center {
+      text-align: center;
+    }
+    .form-group {
+      margin: 20px 0;
+      text-align: center;
+    }
+    .btn {
+      background-color: #4caf50;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 16px;
+    }
+    .btn:disabled {
+      background-color: #9e9e9e;
+      cursor: not-allowed;
+    }
+    .btn:hover:not(:disabled) {
+      background-color: #45a049;
+    }
+    .stats-card {
+      background-color: #f9f9f9;
+      padding: 20px;
+      border-radius: 8px;
+      margin: 20px auto;
+    }
+    .stats-title {
+      margin-bottom: 10px;
+      font-weight: bold;
+      text-decoration: underline;
+    }
+    ul {
+      list-style: none;
+      padding-left: 0;
+    }
+    li {
+      margin: 5px 0;
+    }
+    #loadingSpinner {
+      font-size: 16px;
+      color: #666;
+      margin-top: 10px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1 class="center">Spotify Stats Analyzer</h1>
+    <div class="form-group">
+      <input type="file" id="zipInput" accept=".zip">
+      <button id="analyzeButton" class="btn" disabled>Analyze</button>
+      <div id="loadingSpinner" class="hidden">Loading data, please wait...</div>
+    </div>
+    <div class="form-group">
+      <label for="datePicker">Select Date Range:</label>
+      <input type="text" id="datePicker" readonly>
+    </div>
+    <div class="form-group">
+      <label for="yearSelect">Analyze Specific Year:</label>
+      <select id="yearSelect" class="btn" disabled>
+        <option value="">Select a year</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <button id="allTimeButton" class="btn">Analyze All Time</button>
+    </div>
+    <div id="results"></div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/jszip/dist/jszip.min.js"></script>
+  <script>
+    const zipInput = document.getElementById('zipInput');
+    const analyzeButton = document.getElementById('analyzeButton');
+    const allTimeButton = document.getElementById('allTimeButton');
+    const yearSelect = document.getElementById('yearSelect');
+    const loadingSpinner = document.getElementById('loadingSpinner');
+    const resultsDiv = document.getElementById('results');
+    const datePicker = document.getElementById('datePicker');
+    let streamingData = [];
+    let dateRangePicker;
+
+    // Initialize Litepicker for date range selection
+    dateRangePicker = new Litepicker({
+      element: datePicker,
+      format: 'YYYY-MM-DD',
+      singleMode: false,
+      dropdowns: {
+        minYear: 2010,
+        maxYear: new Date().getFullYear(),
+      },
+    });
+
+    // Event listener for file upload
+    zipInput.addEventListener('change', function () {
+      const file = zipInput.files[0];
+      if (!file) return;
+
+      loadingSpinner.classList.remove('hidden');
+      streamingData = [];
+      const reader = new FileReader();
+
+      reader.onload = function () {
+        JSZip.loadAsync(reader.result).then(zip => {
+          const promises = [];
+          zip.forEach((relativePath, zipEntry) => {
+            if (relativePath.endsWith('.json')) {
+              promises.push(
+                zipEntry.async('string').then(content => {
+                  const data = JSON.parse(content);
+                  streamingData = streamingData.concat(data);
+                })
+              );
+            }
+          });
+
+          Promise.all(promises).then(() => {
+            console.log("Data loaded. Entries:", streamingData.length);
+            loadingSpinner.classList.add('hidden');
+            analyzeButton.disabled = false;
+            allTimeButton.disabled = false;
+
+            // Populate year dropdown
+            populateYearSelect(streamingData);
+          });
+        });
+      };
+
+      reader.readAsArrayBuffer(file);
+    });
+
+    // Populate year dropdown based on available data
+    function populateYearSelect(data) {
+      const years = new Set(data.map(entry => new Date(entry.ts).getFullYear()));
+      yearSelect.innerHTML = '<option value="">Select a year</option>';
+      years.forEach(year => {
+        const option = document.createElement('option');
+        option.value = year;
+        option.textContent = year;
+        yearSelect.appendChild(option);
+      });
+      yearSelect.disabled = false;
+    }
+
+    // Analyze specific date range
+    analyzeButton.addEventListener('click', function () {
+      const startDate = dateRangePicker.getStartDate()?.dateInstance;
+      const endDate = dateRangePicker.getEndDate()?.dateInstance;
+      const dateRange = startDate && endDate ? { start: startDate, end: endDate } : null;
+
+      const filteredData = filterDataByDateRange(streamingData, dateRange);
+      const stats = calculateStats(filteredData);
+      const title = `${startDate.toISOString().split('T')[0]} to ${endDate.toISOString().split('T')[0]}`;
+      displayStats(stats, title);
+    });
+
+    // Analyze all-time stats
+    allTimeButton.addEventListener('click', function () {
+      const stats = calculateStats(streamingData);
+      displayStats(stats, "All Time");
+    });
+
+    // Analyze specific year
+    yearSelect.addEventListener('change', function () {
+      const year = yearSelect.value;
+      if (!year) return;
+
+      const filteredData = filterDataByYear(streamingData, year);
+      const stats = calculateStats(filteredData);
+      displayStats(stats, `Year: ${year}`);
+    });
+
+    function filterDataByDateRange(data, dateRange) {
+      if (!dateRange) return data;
+      const { start, end } = dateRange;
+      return data.filter(entry => {
+        const timestamp = new Date(entry.ts);
+        return timestamp >= start && timestamp <= end;
+      });
+    }
+
+    function filterDataByYear(data, year) {
+      return data.filter(entry => new Date(entry.ts).getFullYear() === parseInt(year));
+    }
+
+    function calculateStats(data) {
+      const stats = { songs: {}, artists: {}, devices: {}, countries: {} };
+
+      data.forEach(entry => {
+        const song = entry.master_metadata_track_name || "Unknown Song";
+        const artist = entry.master_metadata_album_artist_name || "Unknown Artist";
+        const device = entry.platform || "Unknown Device";
+        const country = entry.conn_country || "Unknown Country";
+        const minutesPlayed = (entry.ms_played || 0) / 60000;
+
+        stats.songs[song] = (stats.songs[song] || 0) + minutesPlayed;
+        stats.artists[artist] = (stats.artists[artist] || 0) + minutesPlayed;
+        stats.devices[device] = (stats.devices[device] || 0) + minutesPlayed;
+        stats.countries[country] = (stats.countries[country] || 0) + minutesPlayed;
+      });
+
+      return stats;
+    }
+
+    function displayStats(stats, title) {
+      const generateList = stats =>
+        Object.entries(stats)
+          .sort((a, b) => b[1] - a[1])
+          .slice(0, 5)
+          .map(item => `<li>${item[0]} (${item[1].toFixed(2)} minutes)</li>`)
+          .join("");
+
+      resultsDiv.innerHTML = `
+        <h2 class="center">Statistics for: ${title}</h2>
+        <div class="stats-card">
+          <h3 class="stats-title">Top 5 Songs:</h3>
+          <ul>${generateList(stats.songs)}</ul>
+          <h3 class="stats-title">Top 5 Artists:</h3>
+          <ul>${generateList(stats.artists)}</ul>
+          <h3 class="stats-title">Top 5 Devices:</h3>
+          <ul>${generateList(stats.devices)}</ul>
+          <h3 class="stats-title">Top 5 Countries:</h3>
+          <ul>${generateList(stats.countries)}</ul>
+        </div>
+      `;
+    }
+  </script>
+</body>
+</html>
