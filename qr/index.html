@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <!--AI-generated code, for testing purposes only-->
-    <!--Version 2.4-releasetag-->
+    <!--Version 2.5-featuretest-->
     <meta charset="utf-8" />
     <title>QR Code Generator - ctd's Playground</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -134,32 +134,150 @@
             </label>
             <label><a id="customizationDialogSetting3">Dot Scale (0.1 - 1):</a>
                 <input id="qrDotScale" type="number" step="0.1" min="0.1" max="1" value="1" />
-            <label><a id="customizationDialogSetting4">Logo:</a>
+            </label>
+            <label><a id="customizationDialogSetting4">Dot Scale Timing:</a>
+                <input id="qrDotScaleTiming" type="number" step="0.1" min="0.1" max="1" value="1" />
+            </label>
+            <label><a id="customizationDialogSetting5">Dot Scale Timing Horizontal:</a>
+                <input id="qrDotScaleTiming_H" type="number" step="0.1" min="0.1" max="1" value="1" />
+            </label>
+            <label><a id="customizationDialogSetting6">Dot Scale Timing Vertical:</a>
+                <input id="qrDotScaleTiming_V" type="number" step="0.1" min="0.1" max="1" value="1" />
+            </label>
+            <label><a id="customizationDialogSetting7">Dot Scale Alignment:</a>
+                <input id="qrDotScaleA" type="number" step="0.1" min="0.1" max="1" value="1" />
+            </label>
+            <label><a id="customizationDialogSetting8">Dot Scale Alignment Outer:</a>
+                <input id="qrDotScaleAO" type="number" step="0.1" min="0.1" max="1" value="1" />
+            </label>
+            <label><a id="customizationDialogSetting9">Dot Scale Alignment Inner:</a>
+                <input id="qrDotScaleAI" type="number" step="0.1" min="0.1" max="1" value="1" />
+            </label>
+            <label><a id="customizationDialogSetting10">Quiet Zone:</a>
+                <input id="qrQuietZone" type="number" value="0" />
+            </label>
+            <label><a id="customizationDialogSetting11">Quiet Zone Color:</a>
+                <input id="qrQuietZoneColor" type="color" value="rgba(0,0,0,0)" />
+            </label>
+            <label><a id="customizationDialogSetting12">Logo:</a>
                 <input id="qrLogo" type="file" accept="image/*" />
-                <button type="button" onclick="clearLogo()"><a id=customizationDialogSetting4B1>Clear Logo</a></button>
+                <button type="button" onclick="clearLogo()"><a id="customizationDialogSetting12B1">Clear Logo</a></button>
             </label>
-            <label><a id="customizationDialogSetting5">Background Image:</a>
+            <label><a id="customizationDialogSetting13">Logo Width:</a>
+                <input id="qrLogoWidth" type="number" value="80" />
+            </label>
+            <label><a id="customizationDialogSetting14">Logo Height:</a>
+                <input id="qrLogoHeight" type="number" value="80" />
+            </label>
+            <label><a id="customizationDialogSetting15">Logo Max Width:</a>
+                <input id="qrLogoMaxWidth" type="number" />
+            </label>
+            <label><a id="customizationDialogSetting16">Logo Max Height:</a>
+                <input id="qrLogoMaxHeight" type="number" />
+            </label>
+            <label><a id="customizationDialogSetting17">Logo Background Color:</a>
+                <input id="qrLogoBackgroundColor" type="color" value="#ffffff" />
+            </label>
+            <label><a id="customizationDialogSetting18">Logo Background Transparent:</a>
+                <input id="qrLogoBackgroundTransparent" type="checkbox" />
+            </label>
+            <label><a id="customizationDialogSetting19">Background Image:</a>
                 <input id="qrBgImage" type="file" accept="image/*" />
-                <button type="button" onclick="clearBackgroundImage()"><a id=customizationDialogSetting5B1>Clear Background</a></button>
+                <button type="button" onclick="clearBackgroundImage()"><a id="customizationDialogSetting19B1">Clear Background</a></button>
             </label>
-            <label><a id="customizationDialogSetting6">Auto Color (check for auto):</a>
+            <label><a id="customizationDialogSetting20">Background Image Alpha (0 - 1):</a>
+                <input id="qrBgImageAlpha" type="number" step="0.1" min="0" max="1" value="1" />
+            </label>
+            <label><a id="customizationDialogSetting21">Auto Color:</a>
                 <input id="qrAutoColor" type="checkbox" />
             </label>
-            <label><a id="customizationDialogSetting7">Size:</a>
-                <input id="qrSize" type="number" value="200" />
+            <label><a id="customizationDialogSetting22">Auto Color Dark:</a>
+                <input id="qrAutoColorDark" type="color" value="rgba(0, 0, 0, .6)" />
             </label>
-            <label><a id="customizationDialogSetting8">Margin:</a>
-                <input id="qrMargin" type="number" value="10" />
+            <label><a id="customizationDialogSetting23">Auto Color Light:</a>
+                <input id="qrAutoColorLight" type="color" value="rgba(255, 255, 255, .7)" />
             </label>
-            <label><a id="customizationDialogSetting9">Error Correction Level:</a>
-                <select id="qrErrorCorrectionLevel">
-                    <option id="qrErrorCorrectionLevel1" value="L">Low</option>
-                    <option id="qrErrorCorrectionLevel2" value="M" selected>Medium</option>
-                    <option id="qrErrorCorrectionLevel3" value="Q">Quartile</option>
-                    <option id="qrErrorCorrectionLevel4" value="H">High</option>
+            <label><a id="customizationDialogSetting24">Position Outer Color:</a>
+                <input id="qrPO" type="color" value="#e1622f" />
+            </label>
+            <label><a id="customizationDialogSetting25">Position Inner Color:</a>
+                <input id="qrPI" type="color" value="#aa5b71" />
+            </label>
+            <label><a id="customizationDialogSetting26">Position Outer Color - Top Left:</a>
+                <input id="qrPO_TL" type="color" />
+            </label>
+            <label><a id="customizationDialogSetting27">Position Inner Color - Top Left:</a>
+                <input id="qrPI_TL" type="color" />
+            </label>
+            <label><a id="customizationDialogSetting28">Position Outer Color - Top Right:</a>
+                <input id="qrPO_TR" type="color" />
+            </label>
+            <label><a id="customizationDialogSetting29">Position Inner Color - Top Right:</a>
+                <input id="qrPI_TR" type="color" />
+            </label>
+            <label><a id="customizationDialogSetting30">Position Outer Color - Bottom Left:</a>
+                <input id="qrPO_BL" type="color" />
+            </label>
+            <label><a id="customizationDialogSetting31">Position Inner Color - Bottom Left:</a>
+                <input id="qrPI_BL" type="color" />
+            </label>
+            <label><a id="customizationDialogSetting32">Alignment Outer Color:</a>
+                <input id="qrAO" type="color" />
+            </label>
+            <label><a id="customizationDialogSetting33">Alignment Inner Color:</a>
+                <input id="qrAI" type="color" />
+            </label>
+            <label><a id="customizationDialogSetting34">Timing Color:</a>
+                <input id="qrTiming" type="color" value="#e1622f" />
+            </label>
+            <label><a id="customizationDialogSetting35">Timing Horizontal Color:</a>
+                <input id="qrTiming_H" type="color" />
+            </label>
+            <label><a id="customizationDialogSetting36">Timing Vertical Color:</a>
+                <input id="qrTiming_V" type="color" />
+            </label>
+            <label><a id="customizationDialogSetting37">Title:</a>
+                <input id="qrTitle" type="text" value="QR Title" />
+            </label>
+            <label><a id="customizationDialogSetting38">Title Font:</a>
+                <input id="qrTitleFont" type="text" value="normal normal bold 18px Arial" />
+            </label>
+            <label><a id="customizationDialogSetting39">Title Color:</a>
+                <input id="qrTitleColor" type="color" value="#004284" />
+            </label>
+            <label><a id="customizationDialogSetting40">Title Background Color:</a>
+                <input id="qrTitleBackgroundColor" type="color" value="#fff" />
+            </label>
+            <label><a id="customizationDialogSetting41">Title Height:</a>
+                <input id="qrTitleHeight" type="number" value="70" />
+            </label>
+            <label><a id="customizationDialogSetting42">Title Top:</a>
+                <input id="qrTitleTop" type="number" value="25" />
+            </label>
+            <label><a id="customizationDialogSetting43">Subtitle:</a>
+                <input id="qrSubtitle" type="text" value="QR Subtitle" />
+            </label>
+            <label><a id="customizationDialogSetting44">Subtitle Font:</a>
+                <input id="qrSubtitleFont" type="text" value="normal normal normal 14px Arial" />
+            </label>
+            <label><a id="customizationDialogSetting45">Subtitle Color:</a>
+                <input id="qrSubtitleColor" type="color" value="#004284" />
+            </label>
+            <label><a id="customizationDialogSetting46">Subtitle Top:</a>
+                <input id="qrSubtitleTop" type="number" value="40" />
+            </label>
+            <label><a id="customizationDialogSetting47">Binary Mode:</a>
+                <input id="qrBinary" type="checkbox" />
+            </label>
+            <label><a id="customizationDialogSetting48">Tooltip:</a>
+                <input id="qrTooltip" type="checkbox" />
+            </label>
+            <label><a id="customizationDialogSetting49">Drawer:</a>
+                <select id="qrDrawer">
+                    <option value="canvas">Canvas</option>
+                    <option value="svg">SVG</option>
                 </select>
             </label>
-            <button type="button" onclick="clearPWACache()">Clear PWA Cache</button>
         </div>
     </div>
     <script>
